@@ -32,12 +32,14 @@ namespace CircleApp
               return;
 */
 
+          
             var text = "Asadasdasdsadasd";
             var font = new Font(FontFamily.GenericSansSerif, 24, FontStyle.Bold);
             var rectX = 100f;
             var rectY = 100f;
-            var rectWidth = 300f;
-            var rectHeight = 300f;
+            var rectWidth =500f;
+            var rectHeight =500f;
+            
             e.Graphics.DrawRectangle(new Pen(Color.Red), rectX, rectY, rectWidth, rectHeight);
             #region
             /*
@@ -49,8 +51,12 @@ namespace CircleApp
                      DY =矩形的半径
              */
             #endregion
+
             var diameter = Math.Min(rectHeight, rectWidth);//直径
+           
+            
             var offx = rectX + ((rectWidth - diameter) / 2);//偏移量
+            
             var offy = rectY + ((rectWidth - diameter) / 2);
 
             for (int i = 0; i < text.Length; ++i)
@@ -64,17 +70,15 @@ namespace CircleApp
        
                 var angle = (((float)i / text.Length) - 0.25) * 2 * Math.PI;
         
-                var x = (int)(offx  + (diameter / 2) + Math.Cos(angle) * charRadius);
+                var x = (int)(offx  + (diameter / 2) + Math.Cos(angle) * (diameter/2));
 
-                var y = (int)(offy + (diameter / 2) + Math.Sin(angle) * charRadius);
+                var y = (int)(offy + (diameter / 2) + Math.Sin(angle) * (diameter / 2));
 
                 e.Graphics.TranslateTransform(x, y);//
 
                 e.Graphics.RotateTransform((float)(90 + 360 * angle / (2 * Math.PI)));//按照顺时针方向旋转指定的对象
 
                 e.Graphics.DrawString(c, font, Brushes.Red, 0, 0);
-
-
 
 
                 e.Graphics.ResetTransform();//将Graphics的世界矩阵转换为单位矩阵
