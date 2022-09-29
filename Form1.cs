@@ -57,17 +57,55 @@ namespace CircleApp
 
             //    OrigationTestLabel2(e);
 
-            //  OrigationTestLabel2(e);
-            Test12(e);
-            return;
+            OrigationTestLabel2(e);
+            //Test12(e);
+            //return;
+
+            //  Paint(e.Graphics);
+
         }
 
 
 
+        private void Test13(PaintEventArgs e)
+        {
+
+            Graphics g = e.Graphics;
+            PointF pf0, pf1, pf2, pf3;
+            Pen pen = new Pen(Color.Black);
+            pen.Width = 2;
+            pf0 = new PointF(153.649292F, 141.85F);
+            pf1 = new PointF(153.650925F, 141.848969F);
+            pf2 = new PointF(153.652557F, 141.848465F);
+            pf3 = new PointF(153.65419F, 141.848465F);
+            g.DrawBezier(pen, pf0, pf1, pf2, pf3);
+        }
+
+
+        private void Test12(PaintEventArgs e)
+        {
+
+
+            //  e.Graphics.TranslateTransform(100, 100);
+            var radio = 0;
+            for (int i = 0; i < 13; i++)
+            {
+                radio += 10;
+                e.Graphics.RotateTransform(radio);
+                e.Graphics.DrawString("A", this.Font, SystemBrushes.Highlight, 50, 100);
+
+            }
+            e.Graphics.DrawRectangle(new Pen(Color.Red), new Rectangle(50, 100, 100, 100));
+
+
+        }
+
+        private float positionX = 0f;
+        private float positionY = 0f;
         private void OrigationTestLabel2(PaintEventArgs e)
         {
-            var text = "ABCDEFG";
-            var font = new Font(FontFamily.GenericSansSerif, 40, FontStyle.Regular);
+            var text = "ABCDEFGADSFDFDSFSDSFSDFSDFDSFDSKHJKJHKJHKHKGJJKHGJHGHJDFSDFSDFDS";
+            var font = new Font(FontFamily.GenericSansSerif, 30, FontStyle.Regular);
             var rectX = 100f;
             var rectY = 100f;
             var rectWidth = 300f;
@@ -93,39 +131,24 @@ namespace CircleApp
             var offy = rectY + ((rectWidth - diameter) / 2);
 
 
-            DrawCurvedText(e.Graphics, text, new Point((int)rectX, (int)rectY), 20, 60, font, Brushes.Red);
+            var fontSize = e.Graphics.MeasureString(text, font);
 
-            for (int i = 0; i < text.Length; ++i)
-            {
-                var c = new String(text[i], 1);
+            positionX = offx;
+            positionY = offy;
+            DrawCurvedText(e.Graphics,
+                text,
+                new Point((int)(offx + diameter / 2), (int)(offy + diameter / 2)),
+                (diameter / 2),
+                30,
+                font,
+                Brushes.Orange);
 
-                var fontSize = e.Graphics.MeasureString(c, font);
+            e.Graphics.DrawArc(new Pen(Brushes.Blue, 1.0f), offx + fontSize.Height, offy + fontSize.Height, diameter - (fontSize.Height * 2), diameter - (fontSize.Height * 2), 0, 360);
 
-                var angle = (((float)i / text.Length) - 0.25) * 2 * Math.PI;
+            e.Graphics.DrawLine(new Pen(Color.Black), rectX + rectWidth / 2, 0, 2, 1000000f);
 
+            e.Graphics.DrawLine(new Pen(Color.Black), 0, rectY + rectHeight / 2, 100000f, 2);
 
-
-                //-1.5707963267948966
-                var x = (int)(offx + (diameter / 2) + Math.Cos(angle) * (diameter / 2));
-
-                var y = (int)(offy + (diameter / 2) + Math.Sin(angle) * (diameter / 2));
-
-                e.Graphics.TranslateTransform(x, y);//
-
-                e.Graphics.RotateTransform((float)(90 + 360 * angle / (2 * Math.PI)));//按照顺时针方向旋转指定的对象
-
-                e.Graphics.DrawString(c, font, Brushes.Red, 0, 0);
-                e.Graphics.DrawRectangle(new Pen(Color.Red), 0, 0, fontSize.Width, fontSize.Height);
-
-                e.Graphics.ResetTransform();//将Graphics的世界矩阵转换为单位矩阵
-
-                e.Graphics.DrawArc(new Pen(Brushes.Blue, 1.0f), offx + fontSize.Height, offy + fontSize.Height, diameter - (fontSize.Height * 2), diameter - (fontSize.Height * 2), 0, 360);
-
-                e.Graphics.DrawLine(new Pen(Color.Black), rectX + rectWidth / 2, 0, 2, 1000000f);
-
-                e.Graphics.DrawLine(new Pen(Color.Black), 0, rectY + rectHeight / 2, 100000f, 2);
-
-            }
 
 
 
@@ -133,24 +156,6 @@ namespace CircleApp
         }
 
 
-
-        private void Test12(PaintEventArgs e)
-        {
-
-      
-          //  e.Graphics.TranslateTransform(100, 100);
-            var radio = 0;
-            for (int i = 0; i < 13; i++)
-            {
-                radio += 10;
-                e.Graphics.RotateTransform(radio);
-                e.Graphics.DrawString("A", this.Font, SystemBrushes.Highlight, 50, 100);
-
-            }
-            e.Graphics.DrawRectangle(new Pen(Color.Red), new Rectangle(50, 100, 100, 100));
-
-            e.Graphics.FillPie()
-        }
 
 
 
@@ -160,27 +165,30 @@ namespace CircleApp
         /// <param name="graphics">画笔</param>
         /// <param name="text">文本</param>
         /// <param name="centre">位置</param>
-        /// <param name="distanceFromCentreToBaseOfText">间隔</param>
+        /// <param name="distanceFromCentreToBaseOfText">从原点到文本的距离</param>
         /// <param name="radiansToTextCentre">弧度</param>
         /// <param name="font">字体</param>
         /// <param name="brush">笔刷</param>
-        private static void DrawCurvedText(Graphics graphics, string text, Point centre, float distanceFromCentreToBaseOfText, float radiansToTextCentre, Font font, Brush brush)
+        private void DrawCurvedText(Graphics graphics, string text, Point centre, float distanceFromCentreToBaseOfText, float radiansToTextCentre, Font font, Brush brush)
         {
-            //以后使用的周长
+            //圆形周长
             var circleCircumference = (float)(Math.PI * 2 * distanceFromCentreToBaseOfText);
-            //获得每个字符的宽度
+            //所有字符宽度
             var characterWidths = GetCharacterWidths(graphics, text, font).ToArray();
 
-            // 文本高度
+            var stringFormat = StringFormat.GenericTypographic;
+
+            // 字符最高度
             var characterHeight = graphics.MeasureString(text, font).Height;
 
-            //文本宽度总和
+            //字符宽度总和
             var textLength = characterWidths.Sum();
 
             //上面的字符串长度是我们将用于渲染字符串的弧长。求出所需的起始角度
             //将文本放在radiansToTextCentre的中间。
             float fractionOfCircumference = textLength / circleCircumference;
 
+            //当前字符弧度
             float currentCharacterRadians = radiansToTextCentre + (float)(Math.PI * fractionOfCircumference);
 
             for (int characterIndex = 0; characterIndex < text.Length; characterIndex++)
@@ -188,13 +196,17 @@ namespace CircleApp
                 char @char = text[characterIndex];
 
                 // Polar to cartesian
-                float x = (float)(distanceFromCentreToBaseOfText * Math.Sin(currentCharacterRadians));
-                float y = -(float)(distanceFromCentreToBaseOfText * Math.Cos(currentCharacterRadians));
+                //var x = (int)(positionX + (distanceFromCentreToBaseOfText / 2) + Math.Cos(currentCharacterRadians) * (distanceFromCentreToBaseOfText / 2));
+
+                // var y = (int)(positionY + (distanceFromCentreToBaseOfText / 2) + Math.Sin(currentCharacterRadians) * (distanceFromCentreToBaseOfText / 2));
+
+                float x = (float)((positionX + distanceFromCentreToBaseOfText / 2) * Math.Sin(currentCharacterRadians));
+                float y = -(float)((positionY + distanceFromCentreToBaseOfText / 2) * Math.Cos(currentCharacterRadians));
 
                 using (GraphicsPath characterPath = new GraphicsPath())
                 {
-                    characterPath.AddString(@char.ToString(), font.FontFamily, (int)font.Style, font.Size, Point.Empty,
-                                            StringFormat.GenericTypographic);
+                    characterPath.AddString(@char.ToString(), font.FontFamily, (int)font.Style, font.Size, /*new PointF(positionX - characterHeight,positionY - characterHeight)*/Point.Empty,
+                                           stringFormat);
 
                     var pathBounds = characterPath.GetBounds();
 
@@ -466,6 +478,7 @@ namespace CircleApp
 
             for (int i = 0; i <= 90; i += 10)
             {
+
                 Matrix matrix = new Matrix();
                 matrix.Rotate(90 + i);
                 Graphics g = e.Graphics;
@@ -498,7 +511,10 @@ namespace CircleApp
             }
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 
 
