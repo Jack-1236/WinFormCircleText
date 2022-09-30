@@ -56,14 +56,23 @@ namespace CircleApp
              }*/
 
             //    OrigationTestLabel2(e);
+            GraphicsPath myPath = new GraphicsPath();
 
-            OrigationTestLabel2(e);
+        
+
+
+
+
+
+        //    OrigationTestLabel2(e);
             //Test12(e);
             //return;
 
             //  Paint(e.Graphics);
 
         }
+
+
 
 
 
@@ -104,7 +113,7 @@ namespace CircleApp
         private float positionY = 0f;
         private void OrigationTestLabel2(PaintEventArgs e)
         {
-            var text = "ABCDEFGADSFDFDSFSDSFSDFSDFDSFDSKHJKJHKJHKHKGJJKHGJHGHJDFSDFSDFDS";
+            var text = "ABCDEFG";
             var font = new Font(FontFamily.GenericSansSerif, 30, FontStyle.Regular);
             var rectX = 100f;
             var rectY = 100f;
@@ -139,7 +148,7 @@ namespace CircleApp
                 text,
                 new Point((int)(offx + diameter / 2), (int)(offy + diameter / 2)),
                 (diameter / 2),
-                30,
+                150,
                 font,
                 Brushes.Orange);
 
@@ -154,9 +163,6 @@ namespace CircleApp
 
 
         }
-
-
-
 
 
         /// <summary>
@@ -205,8 +211,7 @@ namespace CircleApp
 
                 using (GraphicsPath characterPath = new GraphicsPath())
                 {
-                    characterPath.AddString(@char.ToString(), font.FontFamily, (int)font.Style, font.Size, /*new PointF(positionX - characterHeight,positionY - characterHeight)*/Point.Empty,
-                                           stringFormat);
+                    characterPath.AddString(@char.ToString(), font.FontFamily, (int)font.Style, font.Size, Point.Empty, stringFormat);
 
                     var pathBounds = characterPath.GetBounds();
 
@@ -246,9 +251,7 @@ namespace CircleApp
             // The length of a space. Necessary because a space measured using StringFormat.GenericTypographic has no width.
             // We can't use StringFormat.GenericDefault for the characters themselves, as it adds unwanted spacing.
             var spaceLength = graphics.MeasureString(" ", font, Point.Empty, StringFormat.GenericDefault).Width;
-
             return text.Select(c => c == ' ' ? spaceLength : graphics.MeasureString(c.ToString(), font, Point.Empty, StringFormat.GenericTypographic).Width);
-
         }
 
         private void OrigationTestLabel(PaintEventArgs e)
@@ -675,6 +678,8 @@ namespace CircleApp
 
 
     }
+
+
 
 
 
